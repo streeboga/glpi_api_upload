@@ -29,7 +29,7 @@ $inputname = 'filename';
 $response = $api_client->request('POST', $base_uri.'/Document/', [
    'headers' => [
       'Session-Token' => $session_token,
-       'App-Token' => 'k9geI9nm2O7jtgnwYyEnfK7jjYFWA152Q7Mtvxye',
+       'App-Token' => $_POST['app-token'],
    ],
    'multipart' => [
       // the document part
