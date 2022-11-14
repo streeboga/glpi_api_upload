@@ -56,7 +56,12 @@ try {
     $document_return = json_decode((string)$response->getBody(), true);
     $json = $response->getBody();
 } catch (Exception $exception) {
-    $json = json_encode( ['error' => true]);
+    $json = json_encode(
+        [
+            'error' => true,
+            "message" => $exception->getMessage(),
+            "trace" => $exception->getTraceAsString()
+        ]);
 } finally {
     unlink($filepath);
 }
