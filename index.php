@@ -29,37 +29,42 @@ file_put_contents($filepath, base64_decode($_POST['file']));
 $inputname = 'filename';
 
 // let's proceed a document addition
-$response = $api_client->request('POST', $base_uri.'/Document/', [
-    'headers' => [
-        'Session-Token' => $session_token,
-        'App-Token' => $_POST['app-token'],
-    ],
-    'multipart' => [
-        // the document part
-        [
-            'name'     => 'uploadManifest',
-            'contents' => json_encode([
-                'input' => [
-                    'name'       => $filename,
-                    '_filename'  => [$filename],
-                ]
-            ])
+try {
+    $response = $api_client->request('POST', $base_uri . '/Document/', [
+        'headers' => [
+            'Session-Token' => $session_token,
+            'App-Token' => $_POST['app-token'],
         ],
-        // the FILE part
-        [
-            'name'     => $inputname.'[]',
-            'contents' => file_get_contents($filepath),
-            'filename' => $filename
-        ]
-    ]]);
-$document_return = json_decode( (string) $response->getBody(), true);
-
-// display return
-if ($response->getStatusCode() != 201) {
-    throw new Exception("Error when sending file/document to api");
+        'multipart' => [
+            // the document part
+            [
+                'name' => 'uploadManifest',
+                'contents' => json_encode([
+                    'input' => [
+                        'name'       => $filename,
+                        '_filename'  => [$filename],
+                    ]
+                ])
+            ],
+            // the FILE part
+            [
+                'name' => $inputname . '[]',
+                'contents' => file_get_contents($filepath),
+                'filename' => $filename
+            ]
+        ]]);
+    $document_return = json_decode((string)$response->getBody(), true);
+    $json = $response->getBody();
+} catch (Exception $exception) {
+    $json = json_encode( ['error' => true]);
+} finally {
+    unlink($filepath);
 }
-unlink($filepath);
+// display return
+//if ($response->getStatusCode() != 201) {
+//    throw new Exception("Error when sending file/document to api");
+//}
 
 header("Content-Type: application/json");
-echo ( $response->getBody());
+echo $json;
 
