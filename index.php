@@ -2,7 +2,8 @@
 error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
-include_once __DIR__."/index.php";
+$postData = file_get_contents('php://input');
+$_POST = json_decode($postData, true);
 
 if (!file_exists(__DIR__.'/vendor/autoload.php')) {
     throw new Exception("No vendor found, please run composer install --no-dev");
