@@ -1,5 +1,5 @@
 <?php
 
-define('GLPI_URL',     "http://path/to/glpi/");
+define('GLPI_URL',     "http://79.137.141.143:8080");
 define('API_USER',     "glpi");
 define('API_PASSWORD', "glpi");
