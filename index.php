@@ -61,5 +61,5 @@ if ($response->getStatusCode() != 201) {
 unlink($filepath);
 
 header("Content-Type: application/json");
-var_dump( $response->getBody());
+echo ( $response->getBody());
 
